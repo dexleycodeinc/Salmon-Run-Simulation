@@ -36,7 +36,6 @@ def main():
             bossCountCheck = True
             break
 '''
-    # Start the simulation
 
     
 # Function to display all 4 player's title, rank, and Salmonmeter    

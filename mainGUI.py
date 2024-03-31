@@ -1,6 +1,8 @@
 from playerStat import enterPlayer
 from IDV import *
+from startSimulation import *
 from tkinter import *
+from tkinter import messagebox
 from ttkbootstrap.constants import *
 import ttkbootstrap as tb
 
@@ -33,7 +35,38 @@ def start_simulation():
     PLAYER_STATS[3].append(player4_combo.current())
     PLAYER_STATS[3].append(player4_entry.get())
 
+    # Validate user input for Entries
+    passed = False
+    for x in range(4):
+
+        # Try if Player's level is an int
+        check = PLAYER_STATS[x][1]
+        try:
+            check = int(check)
+        except:
+            messagebox.showerror("Player " + str(x + 1) + " Error", "Please enter a number for Player "
+                                 + str(x + 1) + ".")
+        else:
+            rank = int(PLAYER_STATS[x][0])
+            # No negative integers
+            if check < 0:
+                messagebox.showerror("Player " + str(x + 1) + " Error", "Player " + str(x + 1)
+                                     + " cannot be a negative level.")
+
+            # No larger numbers over 99. Exception is Eggsecutive VP at 999.
+            elif rank == 8 and check > 999:
+                messagebox.showerror("Player " + str(x + 1) + " Error", "Player " + str(x + 1)
+                                     + " has too high level of a level.")
+            elif rank != 8 and check > 99:
+                messagebox.showerror("Player " + str(x + 1) + " Error", "Player " + str(x + 1)
+                                     + " has too high level of a level.")
+            else:
+                passed = True
+
     print(*PLAYER_STATS)
+    if passed:
+        go = startSimulation(PLAYER_STATS)
+        go.start()
 
 root = tb.Window(themename="superhero")
 # root = Tk()
