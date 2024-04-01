@@ -185,23 +185,45 @@ player2_combo.current(0)
 player3_combo.current(0)
 player4_combo.current(0)
 
+# Create Labels for Waves 1 t0 3
+wave1_label = waveWinrate_label = tb.Label(root, text="Wave 1", font=("Helvetica", 18))
+wave1_label.grid(row=6, column=1, padx=5, pady=(10, 5))
+
+wave2_label = waveWinrate_label = tb.Label(root, text="Wave 2", font=("Helvetica", 18))
+wave2_label.grid(row=6, column=2, padx=5, pady=(10, 5))
+
+wave3_label = waveWinrate_label = tb.Label(root, text="Wave 3", font=("Helvetica", 18))
+wave3_label.grid(row=6, column=3, padx=5, pady=(10, 5))
+
+
 # Create Wave win rate Label
 waveWinrate_label = tb.Label(root, text="Wave Win Rate (%)", font=("Helvetica", 10))
-waveWinrate_label.grid(row=6, column=0, padx=5, pady=(30, 5))
+waveWinrate_label.grid(row=7, column=0, padx=5, pady=(0, 5))
 
-# Create Wave win rate Entry limit from 0 to 100
-waveWinrate_entry= tb.Entry(root)
-waveWinrate_entry.insert(0, 0)
-waveWinrate_entry.grid(row=6, column=1, padx=5, pady=(30, 5))
+# Create Wave 1 win rate Entry limit from 0 to 100
+wave1Winrate_entry= tb.Entry(root)
+wave1Winrate_entry.insert(0, 0)
+wave1Winrate_entry.grid(row=7, column=1, padx=5, pady=(0, 5))
+
+# Create Wave 2 win rate Entry limit from 0 to 100
+wave2Winrate_entry= tb.Entry(root)
+wave2Winrate_entry.insert(0, 0)
+wave2Winrate_entry.grid(row=7, column=2, padx=5, pady=(0, 5))
+
+# Create Wave 3 win rate Entry limit from 0 to 100
+wave3Winrate_entry= tb.Entry(root)
+wave3Winrate_entry.insert(0, 0)
+wave3Winrate_entry.grid(row=7, column=3, padx=5, pady=(0, 5))
+
 
 # Create Boss win rate Label
 bossWinrate_label = tb.Label(root, text="Boss Win Rate (%)", font=("Helvetica", 10))
-bossWinrate_label.grid(row=7, column=0, padx=5)
+bossWinrate_label.grid(row=8, column=0, padx=5, pady=(20,0))
 
 # Create Boss win rate Entry limit from 0 to 100
 bossWinrate_entry= tb.Entry(root)
 bossWinrate_entry.insert(0, 0)
-bossWinrate_entry.grid(row=7, column=1, padx=5)
+bossWinrate_entry.grid(row=8, column=1, padx=5, pady=(20,0))
 
 # Create start button
 start_button = tb.Button(root, text="Run", command=start_simulation)
