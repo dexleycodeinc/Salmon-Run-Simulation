@@ -13,10 +13,15 @@ JOB_TITLES = ['Apprentice', 'Part-Timer', 'Go-Getter', 'Overachiever', 'Profresh
 # Title (int), level (int), smell (int)
 PLAYER_STATS = [[], [], [], []]
 
+# Game stat
+# IDV (int), hazard level (float to 1 decimal), wave win rate (int), boss win rate (int)
+GAME_STATS = [[], [], [], []]
+
 def start_simulation():
     # Clear list
     for x in range(4):
         PLAYER_STATS[x].clear()
+        GAME_STATS[x].clear()
 
     # Take information from GUI and insert into PLAYER_STATS
     # Player 1
@@ -179,6 +184,24 @@ player1_combo.current(0)
 player2_combo.current(0)
 player3_combo.current(0)
 player4_combo.current(0)
+
+# Create Wave win rate Label
+waveWinrate_label = tb.Label(root, text="Wave Win Rate (%)", font=("Helvetica", 10))
+waveWinrate_label.grid(row=6, column=0, padx=5, pady=(30, 5))
+
+# Create Wave win rate Entry limit from 0 to 100
+waveWinrate_entry= tb.Entry(root)
+waveWinrate_entry.insert(0, 0)
+waveWinrate_entry.grid(row=6, column=1, padx=5, pady=(30, 5))
+
+# Create Boss win rate Label
+bossWinrate_label = tb.Label(root, text="Boss Win Rate (%)", font=("Helvetica", 10))
+bossWinrate_label.grid(row=7, column=0, padx=5)
+
+# Create Boss win rate Entry limit from 0 to 100
+bossWinrate_entry= tb.Entry(root)
+bossWinrate_entry.insert(0, 0)
+bossWinrate_entry.grid(row=7, column=1, padx=5)
 
 # Create start button
 start_button = tb.Button(root, text="Run", command=start_simulation)
