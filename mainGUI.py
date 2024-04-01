@@ -13,15 +13,15 @@ JOB_TITLES = ['Apprentice', 'Part-Timer', 'Go-Getter', 'Overachiever', 'Profresh
 # Title (int), level (int), smell (int)
 PLAYER_STATS = [[], [], [], []]
 
-# Game stat
-# IDV (int), hazard level (float to 1 decimal), wave win rate (int), boss win rate (int)
-GAME_STATS = [[], [], [], []]
+# Win rates
+# Wave 1 (int), Wave 2 (int), Wave 3 (int), Boss (int)
+WIN_RATES = []
 
 def start_simulation():
-    # Clear list
+    # Clear lists
+    WIN_RATES.clear()
     for x in range(4):
         PLAYER_STATS[x].clear()
-        GAME_STATS[x].clear()
 
     # Take information from GUI and insert into PLAYER_STATS
     # Player 1
@@ -43,6 +43,12 @@ def start_simulation():
     PLAYER_STATS[3].append(player4_combo.current())
     PLAYER_STATS[3].append(player4_entry.get())
     PLAYER_STATS[3].append(player4_boss.get())
+
+    # Game Stats
+    WIN_RATES.append(wave1Winrate_entry.get())
+    WIN_RATES.append(wave2Winrate_entry.get())
+    WIN_RATES.append(wave3Winrate_entry.get())
+    WIN_RATES.append(bossWinrate_entry.get())
 
     # Validate user input for Entries
     passed = True
@@ -86,8 +92,24 @@ def start_simulation():
                                     "for Player " + str(x + 1) + "'s boss meter.")
                 passed = False
 
+    # Validate user input for Wave/Boss win rates
+    for x in range(4):
+        check = WIN_RATES[x]
+        try:
+            check = int(check)
+        except:
+            messagebox.showerror("Wave " + str(x + 1) + " Error", "Please enter a number for Wave "
+                                 + str(x + 1) + ".")
+            passed = False
+        else:
+            if check < 0 or check > 100:
+                messagebox.showerror("Wave " + str(x + 1) + " Error", "Please enter a number"
+                                                                      " between 0 and 100.")
+                passed = False
+
     if passed:
         print(*PLAYER_STATS)
+        print(*WIN_RATES)
         #go = startSimulation(PLAYER_STATS)
         #go.start()
 
