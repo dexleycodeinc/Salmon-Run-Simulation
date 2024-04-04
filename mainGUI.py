@@ -17,11 +17,15 @@ PLAYER_STATS = [[], [], [], []]
 # Wave 1 (int), Wave 2 (int), Wave 3 (int), Boss (int)
 WIN_RATES = []
 
+# # of games
+GAMES = 0
+
 def start_simulation():
     # Clear lists
     WIN_RATES.clear()
     for x in range(4):
         PLAYER_STATS[x].clear()
+    GAMES = 0
 
     # Take information from GUI and insert into PLAYER_STATS
     # Player 1
@@ -44,11 +48,14 @@ def start_simulation():
     PLAYER_STATS[3].append(player4_entry.get())
     PLAYER_STATS[3].append(player4_boss.get())
 
-    # Game Stats
+    # Win Rates
     WIN_RATES.append(wave1Winrate_entry.get())
     WIN_RATES.append(wave2Winrate_entry.get())
     WIN_RATES.append(wave3Winrate_entry.get())
     WIN_RATES.append(bossWinrate_entry.get())
+
+    # Games
+    GAMES = game_entry.get()
 
     # Validate user input for Entries
     passed = True
@@ -107,9 +114,20 @@ def start_simulation():
                                                                       " between 0 and 100.")
                 passed = False
 
+    try:
+        GAMES = int(GAMES)
+    except:
+        messagebox.showerror("Error", "Please enter a number for the amount of games ")
+        passed = False
+    else:
+        if GAMES < 1:
+            messagebox.showerror("Error", "Please enter a number greater than 0.")
+            passed = False
+
     if passed:
         print(*PLAYER_STATS)
         print(*WIN_RATES)
+        print(GAMES)
         #go = startSimulation(PLAYER_STATS)
         #go.start()
 
@@ -246,6 +264,15 @@ bossWinrate_label.grid(row=8, column=0, padx=5, pady=(20,0))
 bossWinrate_entry= tb.Entry(root)
 bossWinrate_entry.insert(0, 0)
 bossWinrate_entry.grid(row=8, column=1, padx=5, pady=(20,0))
+
+#Create Games label
+game_label = tb.Label(root, text="Games", font=("Helvetica", 10))
+game_label.grid(row=9, column=0, padx=5, pady=(20,0))
+
+# Create Boss win rate Entry limit from 0 to 100
+game_entry= tb.Entry(root)
+game_entry.insert(0, 0)
+game_entry.grid(row=9, column=1, padx=5, pady=(20,0))
 
 # Create start button
 start_button = tb.Button(root, text="Run", command=start_simulation)
