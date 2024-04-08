@@ -17,6 +17,9 @@ PLAYER_STATS = [[], [], [], []]
 # Wave 1 (int), Wave 2 (int), Wave 3 (int), Boss (int)
 WIN_RATES = []
 
+# # of Scales
+SCALES = 0
+
 # # of games
 GAMES = 0
 
@@ -53,6 +56,9 @@ def start_simulation():
     WIN_RATES.append(wave2Winrate_entry.get())
     WIN_RATES.append(wave3Winrate_entry.get())
     WIN_RATES.append(bossWinrate_entry.get())
+
+    # Scales
+    SCALES = scale_entry.get()
 
     # Games
     GAMES = game_entry.get()
@@ -114,28 +120,42 @@ def start_simulation():
                                                                       " between 0 and 100.")
                 passed = False
 
+    # Validate entry for scales
+    try:
+        SCALES = int(SCALES)
+    except:
+        messagebox.showerror("Error", "Please enter a number for the amount of scales.")
+        passed = False
+    else:
+        if SCALES < 2 or SCALES > 9:
+            messagebox.showerror("Error", "Please enter a number between 2 and 9 (inclusive) for"
+                                          " scales.")
+            passed = False
+
+    # Validate entry for games
     try:
         GAMES = int(GAMES)
     except:
-        messagebox.showerror("Error", "Please enter a number for the amount of games ")
+        messagebox.showerror("Error", "Please enter a number for the amount of games.")
         passed = False
     else:
         if GAMES < 1:
-            messagebox.showerror("Error", "Please enter a number greater than 0.")
+            messagebox.showerror("Error", "Please enter a number greater than 0 for games.")
             passed = False
 
     if passed:
-        print(*PLAYER_STATS)
-        print(*WIN_RATES)
-        print(GAMES)
-        #go = startSimulation(PLAYER_STATS)
+       # print(*PLAYER_STATS)
+        #print(*WIN_RATES)
+       # print(SCALES)
+       # print(GAMES)
+        go = startSimulation(PLAYER_STATS, WIN_RATES, SCALES, GAMES)
         #go.start()
 
 root = tb.Window(themename="superhero")
 # root = Tk()
 
 root.title("Player Select")
-root.geometry('600x400')
+root.geometry('700x500')
 
 # Crate Label for entering Rank and Level and Boss Meter
 rank_label = tb.Label(root, text="Rank", font=("Helvetica", 18))
@@ -265,14 +285,23 @@ bossWinrate_entry= tb.Entry(root)
 bossWinrate_entry.insert(0, 0)
 bossWinrate_entry.grid(row=8, column=1, padx=5, pady=(20,0))
 
+# Create Scale label
+scale_label = tb.Label(root, text="Guaranteed Scales", font=("Helvetica", 10))
+scale_label.grid(row=9, column=0, padx=5, pady=(20,0))
+
+# Create Scale entry
+scale_entry= tb.Entry(root)
+scale_entry.insert(0, 2)
+scale_entry.grid(row=9, column=1, padx=5, pady=(20,0))
+
 #Create Games label
 game_label = tb.Label(root, text="Games", font=("Helvetica", 10))
-game_label.grid(row=9, column=0, padx=5, pady=(20,0))
+game_label.grid(row=10, column=0, padx=5, pady=(20,0))
 
 # Create Boss win rate Entry limit from 0 to 100
 game_entry= tb.Entry(root)
 game_entry.insert(0, 0)
-game_entry.grid(row=9, column=1, padx=5, pady=(20,0))
+game_entry.grid(row=10, column=1, padx=5, pady=(20,0))
 
 # Create start button
 start_button = tb.Button(root, text="Run", command=start_simulation)
