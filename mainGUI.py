@@ -298,9 +298,9 @@ scale_entry.grid(row=9, column=1, padx=5, pady=(20,0))
 game_label = tb.Label(root, text="Games", font=("Helvetica", 10))
 game_label.grid(row=10, column=0, padx=5, pady=(20,0))
 
-# Create Boss win rate Entry limit from 0 to 100
+# Create Game entry
 game_entry= tb.Entry(root)
-game_entry.insert(0, 0)
+game_entry.insert(0, 1)
 game_entry.grid(row=10, column=1, padx=5, pady=(20,0))
 
 # Create start button
