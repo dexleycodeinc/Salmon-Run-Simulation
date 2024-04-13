@@ -145,7 +145,7 @@ def start_simulation():
 
     if passed:
        # print(*PLAYER_STATS)
-        #print(*WIN_RATES)
+       # print(*WIN_RATES)
        # print(SCALES)
        # print(GAMES)
         go = startSimulation(PLAYER_STATS, WIN_RATES, SCALES, GAMES)

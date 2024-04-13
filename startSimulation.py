@@ -41,13 +41,15 @@ class startSimulation:
 
         # Set the Xtrawave/Boss chance before starting
         self.setBossChance()
-
         self.printGameStat()
 
         print()
-        
-        #for x in range(self.gameCount):
-        self.waveLoss(3)
+
+        # Cycle through the number of games
+        for x in range(self.gameCount):
+            self.gameNumber += 1
+            self.waveWon()
+            self.printGameStat()
 
     def printGameStat(self):
         print("Game " + str(self.gameNumber))
@@ -72,9 +74,12 @@ class startSimulation:
         #print("Boss chance is: " + str(meterStats[meterTotal]) + "%")
 
     def increaseBossChance(self):
+        # Increase each player's boss chance by 1 up to a max of 5
         for x in range(4):
             if int(self.playerStats[x][2]) < 5:
                 self.playerStats[x][2] = int(self.playerStats[x][2]) + 1
+        # Set the new boss chance
+        self.setBossChance()
 
     def waveLoss(self, waveNum):
         # Lost at wave 1
@@ -99,6 +104,17 @@ class startSimulation:
         self.increaseBossChance()
         self.printGameStat()
 
+    def waveWon(self):
+        # Increase all player's level by 20
+        for x in range(4):
+            self.playerStats[x][1] = int(self.playerStats[x][1]) + 20
+            # Only promote ranks other than Eggsecutive VP
+            if int(self.playerStats[x][1]) > 99 and int(self.playerStats[x][0]) != 8:
+                self.promote(x)
+            # Prevent going above Eggsecutive VP 999
+            elif int(self.playerStats[x][1] > 999 and int(self.playerStats[x][0]) == 8):
+                self.playerStats[x][1] = 999
+
     def demote(self, playerNumber):
         # Can't go below Apprentice
         if int(self.playerStats[playerNumber][0]) == 0:
@@ -107,3 +123,7 @@ class startSimulation:
             # Demote and set new rank to 40
             self.playerStats[playerNumber][0] = int(self.playerStats[playerNumber][0]) - 1
             self.playerStats[playerNumber][1] = 40
+
+    def promote(self, playerNumber):
+        self.playerStats[playerNumber][0] = int(self.playerStats[playerNumber][0]) + 1
+        self.playerStats[playerNumber][1] = 40
