@@ -46,10 +46,29 @@ class startSimulation:
         print()
 
         # Cycle through the number of games
+        gameSuccess = True
         for x in range(self.gameCount):
             self.gameNumber += 1
-            self.waveWon()
-            self.printGameStat()
+
+            # Go through Waves 1 to 3
+            for y in range(1, 4):
+                # Set the probability of winning Wave y
+                randNum = random.randint(0, 100)
+
+                # If the winRate for Wave y is less than the randomly generated number
+                if int(self.winRates[y-1]) < randNum:
+                    self.waveLoss(y)
+                    gameSuccess = False
+                    # Break out of loop if loss at a wave
+                    break
+            # If the team wins all 3 waves, then go to waveWon()
+            if gameSuccess:
+                self.waveWon()
+
+            # Reset gameSuccess to True
+            gameSuccess = True
+
+
 
     def printGameStat(self):
         print("Game " + str(self.gameNumber))
@@ -81,6 +100,13 @@ class startSimulation:
         # Set the new boss chance
         self.setBossChance()
 
+    def resetBossChance(self):
+        # Reset all player's 'smell' to 0
+        for x in range(4):
+            self.playerStats[x][2] = 0
+        # Set the new boss chance
+        self.setBossChance()
+
     def waveLoss(self, waveNum):
         # Lost at wave 1
         if waveNum == 1:
@@ -105,6 +131,12 @@ class startSimulation:
         self.printGameStat()
 
     def waveWon(self):
+        # Determine a chance for a boss to appear
+
+        # If boss appears, reset all 'smell' to 0 and startup Xtrawave
+
+        # If boss does not appear, increase 'smell' meter
+
         # Increase all player's level by 20
         for x in range(4):
             self.playerStats[x][1] = int(self.playerStats[x][1]) + 20
@@ -114,6 +146,8 @@ class startSimulation:
             # Prevent going above Eggsecutive VP 999
             elif int(self.playerStats[x][1] > 999 and int(self.playerStats[x][0]) == 8):
                 self.playerStats[x][1] = 999
+
+        self.printGameStat()
 
     def demote(self, playerNumber):
         # Can't go below Apprentice
