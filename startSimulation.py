@@ -38,7 +38,16 @@ class startSimulation:
         #print('pass')
         #self.printGameStat()
        # print(self.playerStats)
+
+        # Set the Xtrawave/Boss chance before starting
         self.setBossChance()
+
+        self.printGameStat()
+
+        print()
+        
+        #for x in range(self.gameCount):
+        self.waveLoss(3)
 
     def printGameStat(self):
         print("Game " + str(self.gameNumber))
@@ -49,7 +58,7 @@ class startSimulation:
         # Print each player's stats
         for x in range(4):
             print("Player " + str(x+1) + ": " + JOB_TITLES[int(self.playerStats[x][0])] + " " +
-                  self.playerStats[x][1])
+                  str(self.playerStats[x][1]))
 
     def setBossChance(self):
         # The chance of a Boss wave (Xtrawave) is based off of the statistics provided by:
@@ -59,5 +68,42 @@ class startSimulation:
         meterTotal = 0
         for x in range(4):
             meterTotal += int(self.playerStats[x][2])
-        print("Meter total is " + str(meterTotal))
-        print("Boss chance is: " + str(meterStats[meterTotal]) + "%")
+        #print("Meter total is " + str(meterTotal))
+        #print("Boss chance is: " + str(meterStats[meterTotal]) + "%")
+
+    def increaseBossChance(self):
+        for x in range(4):
+            if int(self.playerStats[x][2]) < 5:
+                self.playerStats[x][2] = int(self.playerStats[x][2]) + 1
+
+    def waveLoss(self, waveNum):
+        # Lost at wave 1
+        if waveNum == 1:
+            # Decrease level by 20 for all players
+            for x in range(4):
+                self.playerStats[x][1] = int(self.playerStats[x][1]) - 20
+                if int(self.playerStats[x][1]) < 0:
+                    self.demote(x)
+
+        # Lost at wave 2
+        elif waveNum == 2:
+            for x in range(4):
+                self.playerStats[x][1] = int(self.playerStats[x][1]) - 10
+                if int(self.playerStats[x][1]) < 0:
+                    self.demote(x)
+
+        # Lost at Wave 3
+        # Do nothing
+
+        # Increase "smell" meter after determing wave loss
+        self.increaseBossChance()
+        self.printGameStat()
+
+    def demote(self, playerNumber):
+        # Can't go below Apprentice
+        if int(self.playerStats[playerNumber][0]) == 0:
+            self.playerStats[playerNumber][1] = 0
+        else:
+            # Demote and set new rank to 40
+            self.playerStats[playerNumber][0] = int(self.playerStats[playerNumber][0]) - 1
+            self.playerStats[playerNumber][1] = 40
