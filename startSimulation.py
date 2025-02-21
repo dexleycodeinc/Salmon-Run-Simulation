@@ -70,7 +70,7 @@ class startSimulation:
                 # First determine if there is a chance for an Xtrawave
                 xtrawaveChance = self.calcBossChanc(self.bossChance)
 
-            
+
 
                 # If no Xtrawave, then increase the boss chance and set the new level
 
