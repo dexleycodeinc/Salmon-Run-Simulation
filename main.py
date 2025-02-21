@@ -40,15 +40,12 @@ def main():
     
 # Function to display all 4 player's title, rank, and Salmonmeter    
 def playerInfoCheck():
-    global IDV
-    global HAZARD_LEVEL
     for x in PLAYERS_INFO:
         print(x)
     print(IDV)
     print(HAZARD_LEVEL)
 
 def tkinerWindow():
-
     root = tb.Window(themename="superhero")
     #root = Tk()
 
@@ -63,7 +60,6 @@ def tkinerWindow():
     player1_combo = tb.Combobox(root, bootstyle="success", values=JOB_TITLES)
     player1_combo.pack(pady=20)
 
-    
     root.mainloop()
 
 #main()

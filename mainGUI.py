@@ -143,6 +143,7 @@ def start_simulation():
             messagebox.showerror("Error", "Please enter a number greater than 0 for games.")
             passed = False
 
+    # Start up the simulation when all checks have passed
     if passed:
        # print(*PLAYER_STATS)
        # print(*WIN_RATES)

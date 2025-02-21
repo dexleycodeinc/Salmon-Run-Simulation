@@ -39,16 +39,15 @@ class startSimulation:
         #self.printGameStat()
        # print(self.playerStats)
 
-        # Set the Xtrawave/Boss chance before starting
-        self.setBossChance()
-        self.printGameStat()
-
-        print()
-
+        self.bossChance = self.setBossChance()
         # Cycle through the number of games
         gameSuccess = True
         for x in range(self.gameCount):
             self.gameNumber += 1
+
+            # Set the IDV and hazard level at the beginning of each wave
+            self.IDV = calculateIDV(self.playerStats)
+            self.hazardLevel = calculateHazardLevel(self.IDV)
 
             # Go through Waves 1 to 3
             for y in range(1, 4):
@@ -59,19 +58,34 @@ class startSimulation:
                 if int(self.winRates[y-1]) < randNum:
                     self.waveLoss(y)
                     gameSuccess = False
-                    # Break out of loop if loss at a wave
+
+                    # Increase boss chance on a wave loss and set the new level
+                    self.increaseBossChance()
+                    self.bossChance = self.setBossChance()
                     break
             # If the team wins all 3 waves, then go to waveWon()
             if gameSuccess:
                 self.waveWon()
+
+                # First determine if there is a chance for an Xtrawave
+                xtrawaveChance = self.calcBossChanc(self.bossChance)
+
+            
+
+                # If no Xtrawave, then increase the boss chance and set the new level
+
 
             # Reset gameSuccess to True
             gameSuccess = True
 
 
 
+        self.printGameStat()
+
+
+
     def printGameStat(self):
-        print("Game " + str(self.gameNumber))
+        print("Game " + str(self.gameNumber) + " Final Results")
 
         #print("Player " + str(1) + ": " + JOB_TITLES[int(self.playerStats[0][0])] + " " +
               #self.playerStats[0][1])
@@ -79,37 +93,48 @@ class startSimulation:
         # Print each player's stats
         for x in range(4):
             print("Player " + str(x+1) + ": " + JOB_TITLES[int(self.playerStats[x][0])] + " " +
-                  str(self.playerStats[x][1]))
+                  str(self.playerStats[x][1]) + " Smell: " + str(self.playerStats[x][2]))
 
     def setBossChance(self):
-        # The chance of a Boss wave (Xtrawave) is based off of the statistics provided by:
-        # https://splatoonwiki.org/wiki/Xtrawave#Salmometer
-        meterStats = [0, 0, 0, 0, 0, 1.5625, 3.75, 6.5625, 10, 14.0625, 18.75, 24.0625,
-                      30, 36.5625, 43.75, 51.5625, 60, 69.0625, 78.75, 89.0625, 100]
+
         meterTotal = 0
         for x in range(4):
             meterTotal += int(self.playerStats[x][2])
         #print("Meter total is " + str(meterTotal))
         #print("Boss chance is: " + str(meterStats[meterTotal]) + "%")
+        return meterTotal
+
+    def calcBossChanc(self, meterVal):
+        # Calculate the chances of a boss by using the meterStats from the Wiki
+        # The chance is out of 100
+        # https://splatoonwiki.org/wiki/Xtrawave#Salmometer
+        meterStats = [0, 0, 0, 0, 0, 1.5625, 3.75, 6.5625, 10, 14.0625, 18.75, 24.0625,
+                      30, 36.5625, 43.75, 51.5625, 60, 69.0625, 78.75, 89.0625, 100]
+        randNum = random.randint(0, 100)
+        chanceTime = meterStats[meterVal]
+
+        if chanceTime < randNum:
+            return False
+        else:
+            return True
+
 
     def increaseBossChance(self):
         # Increase each player's boss chance by 1 up to a max of 5
         for x in range(4):
             if int(self.playerStats[x][2]) < 5:
                 self.playerStats[x][2] = int(self.playerStats[x][2]) + 1
-        # Set the new boss chance
-        self.setBossChance()
 
     def resetBossChance(self):
         # Reset all player's 'smell' to 0
         for x in range(4):
             self.playerStats[x][2] = 0
-        # Set the new boss chance
-        self.setBossChance()
 
     def waveLoss(self, waveNum):
         # Lost at wave 1
         if waveNum == 1:
+
+            print("Game " + str(self.gameNumber) + " lost Wave 1.")
             # Decrease level by 20 for all players
             for x in range(4):
                 self.playerStats[x][1] = int(self.playerStats[x][1]) - 20
@@ -118,19 +143,23 @@ class startSimulation:
 
         # Lost at wave 2
         elif waveNum == 2:
+
+            print("Game " + str(self.gameNumber) + " lost Wave 2.")
             for x in range(4):
+                # Decrease level by 10 for all players
                 self.playerStats[x][1] = int(self.playerStats[x][1]) - 10
                 if int(self.playerStats[x][1]) < 0:
                     self.demote(x)
 
         # Lost at Wave 3
-        # Do nothing
+        else:
+            # No level loss
+            print("Game " + str(self.gameNumber) + " lost Wave 3.")
 
-        # Increase "smell" meter after determing wave loss
-        self.increaseBossChance()
-        self.printGameStat()
+        #self.printGameStat()
 
     def waveWon(self):
+        print("Game " + str(self.gameNumber) + " won.")
         # Determine a chance for a boss to appear
 
         # If boss appears, reset all 'smell' to 0 and startup Xtrawave
@@ -147,7 +176,7 @@ class startSimulation:
             elif int(self.playerStats[x][1] > 999 and int(self.playerStats[x][0]) == 8):
                 self.playerStats[x][1] = 999
 
-        self.printGameStat()
+        #self.printGameStat()
 
     def demote(self, playerNumber):
         # Can't go below Apprentice
