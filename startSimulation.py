@@ -45,10 +45,6 @@ class startSimulation:
         for x in range(self.gameCount):
             self.gameNumber += 1
 
-            # Set the IDV and hazard level at the beginning of each wave
-            self.IDV = calculateIDV(self.playerStats)
-            self.hazardLevel = calculateHazardLevel(self.IDV)
-
             # Go through Waves 1 to 3
             for y in range(1, 4):
                 # Set the probability of winning Wave y
